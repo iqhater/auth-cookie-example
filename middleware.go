@@ -18,6 +18,7 @@ func isAuth(next http.HandlerFunc) http.HandlerFunc {
 
 			// check method post
 			if req.Method == http.MethodPost {
+
 				// set new cookie session id
 				c = createCookie()
 				http.SetCookie(w, c)
@@ -27,26 +28,11 @@ func isAuth(next http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 		next(w, req)
-
-		// http.Redirect(w, req, "/login", http.StatusSeeOther)
-		// return
-
-		// expiredCookie := &http.Cookie{Path: "/", Name: "session", MaxAge: -1, Expires: time.Now().Add(-100 * time.Hour)}
-		// http.SetCookie(w, expiredCookie)
-
-		// http.Error(w, "Wrong login or password!", http.StatusUnauthorized)
-
 	}
 }
 
 func validate(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-
-		// // check method post
-		// if req.Method != http.MethodPost {
-		// 	http.Redirect(w, req, "/login", http.StatusSeeOther)
-		// 	return
-		// }
 
 		// check password
 		err := bcrypt.CompareHashAndPassword(passwordHash, []byte(req.FormValue("password")))
@@ -65,11 +51,11 @@ func validate(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func isAuthorized(next http.HandlerFunc) http.HandlerFunc {
+/* func isAuthorized(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
 	}
-}
+} */
 
 func showLog(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
