@@ -1,0 +1,18 @@
+h1 {
+    color: #1f976f;
+}
+
+p {
+    width: 55vw;
+    color: rgb(80, 80, 80);
+}
+
+#signout {
+    display: block;
+    width: 70px;
+    height: 25px;
+}
+
+#signout:hover {
+    cursor: pointer;
+}

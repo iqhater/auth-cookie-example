@@ -1,0 +1,16 @@
+h2 {
+    color: #14586e;
+}
+
+input {
+    margin-bottom: 1em;
+}
+
+input[type=submit] {
+    width: 70px;
+    height: 25px;
+}
+
+#signin:hover {
+    cursor: pointer;
+}

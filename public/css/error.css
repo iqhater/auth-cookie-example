@@ -1,0 +1,12 @@
+h2 {
+    color: rgb(182, 69, 69);
+}
+
+#back {
+    width: 70px;
+    height: 25px;
+}
+
+#back:hover {
+    cursor: pointer;
+}
