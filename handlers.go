@@ -21,6 +21,7 @@ func logout(w http.ResponseWriter, req *http.Request) {
 }
 
 func admin(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Cache-Control", "no-cache, private, max-age=0")
 	http.ServeFile(w, req, "./public/user.html")
 }
 
