@@ -21,11 +21,17 @@ func isAuth(next http.HandlerFunc) http.HandlerFunc {
 
 				// set new cookie session id
 				c = createCookie()
+				sessionID = c.Value
 				http.SetCookie(w, c)
 			} else {
 				http.Redirect(w, req, "/", http.StatusSeeOther)
 				return
 			}
+		}
+
+		if sessionID != c.Value && sessionName != c.Name {
+			http.Redirect(w, req, "/", http.StatusSeeOther)
+			return
 		}
 		next(w, req)
 	}
