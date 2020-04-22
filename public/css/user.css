@@ -4,6 +4,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    line-height: 1.47;
+    letter-spacing: 0.03em;
+    font-family: monospace;
 }
 
 h1 {
@@ -13,6 +16,11 @@ h1 {
 p {
     width: 55vw;
     color: rgb(80, 80, 80);
+}
+
+img {
+    width: 25%;
+    float: right;
 }
 
 #signout {

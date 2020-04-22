@@ -4,6 +4,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    line-height: 1.47;
+    letter-spacing: 0.03em;
+    font-family: monospace;
 }
 
 h2 {
@@ -17,6 +20,11 @@ input {
 input[type=submit] {
     width: 70px;
     height: 25px;
+}
+
+#signin {
+    display: block;
+    margin: auto;
 }
 
 #signin:hover {
