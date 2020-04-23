@@ -40,11 +40,12 @@ func main() {
 
 	passwordHash, _ = bcrypt.GenerateFromPassword([]byte(PASSWORD), bcrypt.MinCost)
 
-	http.HandleFunc("/", login)
+	http.HandleFunc("/", notFound(login))
 	http.HandleFunc("/login", showLog(validate(isAuth(admin))))
 	http.HandleFunc("/logout", showLog(isAuth(logout)))
 	http.HandleFunc("/user", showLog(isAuth(admin)))
 	http.HandleFunc("/error", showLog(unAuth))
+	http.HandleFunc("/404", showLog(pageNotFound))
 	http.Handle("./favicon.ico", http.NotFoundHandler())
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))

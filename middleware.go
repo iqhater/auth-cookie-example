@@ -71,6 +71,20 @@ func showLog(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+func notFound(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		routes := []string{"/", "/login", "/logout", "/error", "/user"}
+
+		for _, route := range routes {
+			if req.URL.Path == route {
+				next(w, req)
+				return
+			}
+		}
+		http.Redirect(w, req, "/404", http.StatusSeeOther)
+	}
+}
+
 func createCookie() *http.Cookie {
 
 	id := uuid.NewV4()

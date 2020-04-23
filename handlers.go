@@ -24,3 +24,7 @@ func admin(w http.ResponseWriter, req *http.Request) {
 func unAuth(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "./public/error.html")
 }
+
+func pageNotFound(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./public/404.html")
+}
