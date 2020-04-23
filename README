@@ -1,5 +1,13 @@
-Simple auth app example with cookie sessions.
+## Simple auth app example with cookie sessions.
 
+# Description
 App has a one user. See example.env file, where user credentials is located.
 
 Create .env file in the root of project and paste inside your user credentials.
+
+### Reduce build size
+
+```
+$ go build -ldflags "-s -w"
+$ upx -f --brute -o build_name.upx build_name
+```
