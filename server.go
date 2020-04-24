@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -12,36 +11,38 @@ import (
 
 // init is invoked before main()
 func init() {
+
 	// loads values from .env into the system
 	if err := godotenv.Load(); err != nil {
 		log.Print("No .env file found")
 	}
 }
 
-var LOGIN string
-var PASSWORD string
-var passwordHash []byte
-
 func main() {
 
 	user, exists := os.LookupEnv("LOGIN")
 	if !exists {
-		fmt.Println("Env variable LOGIN does not exist!")
+		log.Println("Env variable LOGIN does not exist!")
 	}
-
-	LOGIN = user
 
 	pass, exists := os.LookupEnv("PASSWORD")
 	if !exists {
-		fmt.Println("Env variable PASSWORD does not exist!")
+		log.Println("Env variable PASSWORD does not exist!")
 	}
 
-	PASSWORD = pass
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.MinCost)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	passwordHash, _ = bcrypt.GenerateFromPassword([]byte(PASSWORD), bcrypt.MinCost)
+	u := &User{
+		login:        user,
+		password:     pass,
+		passwordHash: passwordHash,
+	}
 
 	http.HandleFunc("/", notFound(login))
-	http.HandleFunc("/login", showLog(validate(isAuth(admin))))
+	http.HandleFunc("/login", showLog(u.validate(isAuth(admin))))
 	http.HandleFunc("/logout", showLog(isAuth(logout)))
 	http.HandleFunc("/user", showLog(isAuth(admin)))
 	http.HandleFunc("/error", showLog(unAuth))

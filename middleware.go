@@ -37,11 +37,11 @@ func isAuth(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func validate(next http.HandlerFunc) http.HandlerFunc {
+func (u *User) validate(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
 		// check password
-		err := bcrypt.CompareHashAndPassword(passwordHash, []byte(req.FormValue("password")))
+		err := bcrypt.CompareHashAndPassword(u.passwordHash, []byte(req.FormValue("password")))
 		if err != nil {
 			http.Redirect(w, req, "/error", http.StatusSeeOther)
 			return
@@ -49,7 +49,7 @@ func validate(next http.HandlerFunc) http.HandlerFunc {
 
 		// check login
 		login := req.FormValue("login")
-		if login != LOGIN {
+		if login != u.login {
 			http.Redirect(w, req, "/error", http.StatusSeeOther)
 			return
 		}
