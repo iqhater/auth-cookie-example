@@ -41,10 +41,15 @@ func main() {
 		passwordHash: passwordHash,
 	}
 
+	s := &Session{
+		ID:   "",
+		Name: "",
+	}
+
 	http.HandleFunc("/", notFound(login))
-	http.HandleFunc("/login", showLog(u.validate(isAuth(admin))))
-	http.HandleFunc("/logout", showLog(isAuth(logout)))
-	http.HandleFunc("/user", showLog(isAuth(admin)))
+	http.HandleFunc("/login", showLog(u.validate(s.isAuth(admin))))
+	http.HandleFunc("/logout", showLog(s.isAuth(s.logout)))
+	http.HandleFunc("/user", showLog(s.isAuth(admin)))
 	http.HandleFunc("/error", showLog(unAuth))
 	http.HandleFunc("/404", showLog(pageNotFound))
 	http.Handle("./favicon.ico", http.NotFoundHandler())

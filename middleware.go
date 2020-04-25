@@ -9,7 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func isAuth(next http.HandlerFunc) http.HandlerFunc {
+func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
 		// check session if user already logged in
@@ -21,7 +21,7 @@ func isAuth(next http.HandlerFunc) http.HandlerFunc {
 
 				// set new cookie session id
 				c = createCookie()
-				sessionID = c.Value
+				s.ID = c.Value
 				http.SetCookie(w, c)
 			} else {
 				http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -29,7 +29,7 @@ func isAuth(next http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 
-		if sessionID != c.Value && sessionName != c.Name {
+		if s.ID != c.Value && s.Name != c.Name {
 			http.Redirect(w, req, "/", http.StatusSeeOther)
 			return
 		}

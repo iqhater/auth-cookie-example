@@ -2,11 +2,14 @@ package main
 
 import "net/http"
 
-var sessionName string
-var sessionID string
+// Session struct store key-value pair of cookie session
+type Session struct {
+	ID   string
+	Name string
+}
 
 // delete cookie
-func deleteCookie(w http.ResponseWriter) {
+func (s *Session) deleteCookie(w http.ResponseWriter) {
 
 	c := &http.Cookie{
 		Name:   "session",
@@ -15,6 +18,6 @@ func deleteCookie(w http.ResponseWriter) {
 	}
 	http.SetCookie(w, c)
 
-	sessionName = ""
-	sessionID = ""
+	s.ID = ""
+	s.Name = ""
 }

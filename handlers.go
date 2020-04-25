@@ -10,9 +10,9 @@ func login(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "./public/login.html")
 }
 
-func logout(w http.ResponseWriter, req *http.Request) {
+func (s *Session) logout(w http.ResponseWriter, req *http.Request) {
 
-	deleteCookie(w)
+	s.deleteCookie(w)
 	http.Redirect(w, req, "/", http.StatusSeeOther)
 }
 
