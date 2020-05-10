@@ -52,6 +52,7 @@ func main() {
 	http.HandleFunc("/user", showLog(s.isAuth(admin)))
 	http.HandleFunc("/error", showLog(unAuth))
 	http.HandleFunc("/404", showLog(pageNotFound))
+
 	http.Handle("./favicon.ico", http.NotFoundHandler())
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))

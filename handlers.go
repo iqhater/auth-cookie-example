@@ -5,8 +5,6 @@ import (
 )
 
 func login(w http.ResponseWriter, req *http.Request) {
-
-	// deleteCookie(w)
 	http.ServeFile(w, req, "./public/login.html")
 }
 
