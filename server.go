@@ -46,7 +46,11 @@ func main() {
 		Name: "",
 	}
 
-	http.HandleFunc("/", notFound(login))
+	r := &Routes{
+		routes: []string{"/", "/login", "/logout", "/error", "/user"},
+	}
+
+	http.HandleFunc("/", r.notFound(login))
 	http.HandleFunc("/login", showLog(u.validate(s.isAuth(admin))))
 	http.HandleFunc("/logout", showLog(s.isAuth(s.logout)))
 	http.HandleFunc("/user", showLog(s.isAuth(admin)))

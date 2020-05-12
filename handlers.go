@@ -9,7 +9,6 @@ func login(w http.ResponseWriter, req *http.Request) {
 }
 
 func (s *Session) logout(w http.ResponseWriter, req *http.Request) {
-
 	s.deleteCookie(w)
 	http.Redirect(w, req, "/", http.StatusSeeOther)
 }

@@ -71,11 +71,10 @@ func showLog(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func notFound(next http.HandlerFunc) http.HandlerFunc {
+func (r *Routes) notFound(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		routes := []string{"/", "/login", "/logout", "/error", "/user"}
 
-		for _, route := range routes {
+		for _, route := range r.routes {
 			if req.URL.Path == route {
 				next(w, req)
 				return
