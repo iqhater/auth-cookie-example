@@ -23,6 +23,10 @@ func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 				c = createCookie()
 				s.ID = c.Value
 				http.SetCookie(w, c)
+
+				// if all credentials is OK then redirect to user page
+				http.Redirect(w, req, "/user", http.StatusSeeOther)
+				return
 			} else {
 				http.Redirect(w, req, "/", http.StatusSeeOther)
 				return
@@ -91,6 +95,7 @@ func createCookie() *http.Cookie {
 	return &http.Cookie{
 		Name:  "session",
 		Value: id.String(),
+		//TODO: enable secure https after tls server enable
 		// Secure: true, // https
 		HttpOnly: true,
 		Expires:  time.Now().Add(time.Minute), // 1 minute expire session removed
