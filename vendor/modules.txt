@@ -4,7 +4,7 @@ github.com/joho/godotenv
 # github.com/satori/go.uuid v1.2.0
 ## explicit
 github.com/satori/go.uuid
-# golang.org/x/crypto v0.0.0-20200420104511-884d27f42877
+# golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
 ## explicit
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
