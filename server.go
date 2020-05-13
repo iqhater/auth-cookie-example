@@ -64,5 +64,5 @@ func main() {
 
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
-	log.Fatal(http.ListenAndServe(":4450", mux))
+	log.Fatal(http.ListenAndServeTLS(":4450", "tls/auth.signin.dev+1.pem", "tls/auth.signin.dev+1-key.pem", secureHeaders(mux)))
 }

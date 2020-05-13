@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
 
-	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -20,9 +18,7 @@ func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 			if req.Method == http.MethodPost {
 
 				// set new cookie session id
-				c = createCookie()
-				s.ID = c.Value
-				http.SetCookie(w, c)
+				http.SetCookie(w, s.createCookie())
 
 				// if all credentials is OK then redirect to user page
 				http.Redirect(w, req, "/user", http.StatusSeeOther)
@@ -88,16 +84,11 @@ func (r *Routes) notFound(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func createCookie() *http.Cookie {
-
-	id := uuid.NewV4()
-
-	return &http.Cookie{
-		Name:  "session",
-		Value: id.String(),
-		//TODO: enable secure https after tls server enable
-		// Secure: true, // https
-		HttpOnly: true,
-		Expires:  time.Now().Add(time.Minute), // 1 minute expire session removed
-	}
+func secureHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Set("X-XSS-Protection", "1; mode=block")
+		w.Header().Set("X-Frame-Options", "deny")
+		next.ServeHTTP(w, req)
+		return
+	})
 }
