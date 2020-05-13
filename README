@@ -3,7 +3,23 @@
 # Description
 App has a one user. See example.env file, where user credentials is located.
 
-Create .env file in the root of project and paste inside your user credentials.
+## Prepare project data:
+
+- Create .env file in the root of project and paste inside your user credentials. (See example.env file)
+
+- Generate TLS certificates for local usage.
+
+### Generate tls certificates
+
+```
+$ mkcert auth.signin.dev localhost
+```
+
+### Project URL:
+[https://localhost:4450](https://localhost:4450)
+
+# Useful commands
+Build binary with maximum reduced build size.
 
 ### Reduce build size
 
