@@ -50,16 +50,18 @@ func main() {
 		routes: []string{"/", "/login", "/logout", "/error", "/user"},
 	}
 
-	http.HandleFunc("/", r.notFound(login))
-	http.HandleFunc("/login", showLog(u.validate(s.isAuth(admin))))
-	http.HandleFunc("/logout", showLog(s.isAuth(s.logout)))
-	http.HandleFunc("/user", showLog(s.isAuth(admin)))
-	http.HandleFunc("/error", showLog(unAuth))
-	http.HandleFunc("/404", showLog(pageNotFound))
+	mux := http.NewServeMux()
 
-	http.Handle("./favicon.ico", http.NotFoundHandler())
+	mux.HandleFunc("/", r.notFound(login))
+	mux.HandleFunc("/login", showLog(u.validate(s.isAuth(admin))))
+	mux.HandleFunc("/logout", showLog(s.isAuth(s.logout)))
+	mux.HandleFunc("/user", showLog(s.isAuth(admin)))
+	mux.HandleFunc("/error", showLog(unAuth))
+	mux.HandleFunc("/404", showLog(pageNotFound))
 
-	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+	mux.Handle("./favicon.ico", http.NotFoundHandler())
 
-	log.Fatal(http.ListenAndServe(":4450", nil))
+	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+
+	log.Fatal(http.ListenAndServe(":4450", mux))
 }
