@@ -29,7 +29,7 @@ func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 
-		if s.ID != c.Value && s.Name != c.Name {
+		if s.ID != c.Value || s.Name != c.Name {
 			http.Redirect(w, req, "/", http.StatusSeeOther)
 			return
 		}

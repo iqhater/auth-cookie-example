@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strings"
 )
 
 func login(w http.ResponseWriter, req *http.Request) {
@@ -24,4 +25,9 @@ func unAuth(w http.ResponseWriter, req *http.Request) {
 
 func pageNotFound(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "./public/404.html")
+}
+
+func redirect(w http.ResponseWriter, req *http.Request) {
+	host := strings.Split(req.Host, ":")[0]
+	http.Redirect(w, req, "https://"+host+":4433", http.StatusMovedPermanently)
 }

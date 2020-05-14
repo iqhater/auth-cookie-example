@@ -27,6 +27,7 @@ func (s *Session) createCookie() *http.Cookie {
 		Expires:  time.Now().Add(time.Minute), // 1 minute expire session removed
 	}
 
+	s.Name = c.Name
 	s.ID = c.Value
 	return c
 }
