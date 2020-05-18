@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
@@ -20,7 +20,7 @@ func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 				// set new cookie session id
 				http.SetCookie(w, s.createCookie())
 
-				// if all credentials is OK then redirect to user page
+				// redirect to user page
 				http.Redirect(w, req, "/user", http.StatusSeeOther)
 				return
 			} else {
@@ -29,6 +29,7 @@ func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 
+		// check user is already logged in
 		if s.ID != c.Value || s.Name != c.Name {
 			http.Redirect(w, req, "/", http.StatusSeeOther)
 			return
@@ -40,16 +41,14 @@ func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 func (u *User) validate(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
+		// parse login
+		login := req.FormValue("login")
+
 		// check password
 		err := bcrypt.CompareHashAndPassword(u.passwordHash, []byte(req.FormValue("password")))
-		if err != nil {
-			http.Redirect(w, req, "/error", http.StatusSeeOther)
-			return
-		}
 
-		// check login
-		login := req.FormValue("login")
-		if login != u.login {
+		// check method post, check login and check password
+		if req.Method != http.MethodPost || err != nil || login != u.login {
 			http.Redirect(w, req, "/error", http.StatusSeeOther)
 			return
 		}
@@ -57,18 +56,11 @@ func (u *User) validate(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-/* func isAuthorized(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-
-	}
-} */
-
-func showLog(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Printf("%s %s %s %s\n", req.Method, req.RemoteAddr, req.URL.Path, req.Proto)
-		next(w, req)
-		return
-	}
+func showLog(next http.Handler) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		log.Printf("%s %s %s %s\n", req.Method, req.RemoteAddr, req.URL.Path, req.Proto)
+		next.ServeHTTP(w, req)
+	})
 }
 
 func (r *Routes) notFound(next http.HandlerFunc) http.HandlerFunc {
@@ -89,6 +81,5 @@ func secureHeaders(next http.Handler) http.Handler {
 		w.Header().Set("X-XSS-Protection", "1; mode=block")
 		w.Header().Set("X-Frame-Options", "deny")
 		next.ServeHTTP(w, req)
-		return
 	})
 }

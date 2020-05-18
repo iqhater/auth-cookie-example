@@ -53,18 +53,18 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", r.notFound(login))
-	mux.HandleFunc("/login", showLog(u.validate(s.isAuth(admin))))
-	mux.HandleFunc("/logout", showLog(s.isAuth(s.logout)))
-	mux.HandleFunc("/user", showLog(s.isAuth(admin)))
-	mux.HandleFunc("/error", showLog(unAuth))
-	mux.HandleFunc("/404", showLog(pageNotFound))
+	mux.HandleFunc("/login", u.validate(s.isAuth(admin)))
+	mux.HandleFunc("/logout", s.isAuth(s.logout))
+	mux.HandleFunc("/user", s.isAuth(admin))
+	mux.HandleFunc("/error", unAuth)
+	mux.HandleFunc("/404", pageNotFound)
 
 	mux.Handle("./favicon.ico", http.NotFoundHandler())
 
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
 	// Redirect every HTTP request to HTTPS
-	go http.ListenAndServe(":8080", http.HandlerFunc(redirect))
+	go http.ListenAndServe(":8080", showLog(http.HandlerFunc(redirectToHTTPS)))
 
-	log.Fatal(http.ListenAndServeTLS(":4433", "tls/auth.signin.dev+1.pem", "tls/auth.signin.dev+1-key.pem", secureHeaders(mux)))
+	log.Fatal(http.ListenAndServeTLS(":4433", "tls/auth.signin.dev+1.pem", "tls/auth.signin.dev+1-key.pem", showLog(secureHeaders(mux))))
 }
