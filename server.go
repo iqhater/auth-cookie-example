@@ -63,7 +63,7 @@ func main() {
 
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
-	// Redirect every HTTP request to HTTPS
+	// Redirect HTTP requests to HTTPS
 	go http.ListenAndServe(":8080", showLog(http.HandlerFunc(redirectToHTTPS)))
 
 	log.Fatal(http.ListenAndServeTLS(":4433", "tls/auth.signin.dev+1.pem", "tls/auth.signin.dev+1-key.pem", showLog(secureHeaders(mux))))
