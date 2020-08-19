@@ -27,12 +27,12 @@ func (s *Session) createCookie() *http.Cookie {
 		Expires:  time.Now().Add(time.Minute), // 1 minute expire session removed
 	}
 
-	s.Name = c.Name
 	s.ID = c.Value
+	s.Name = c.Name
 	return c
 }
 
-// delete cookie
+// deleteCookie method remove cookie and reset user credentials
 func (s *Session) deleteCookie(w http.ResponseWriter) {
 
 	c := &http.Cookie{

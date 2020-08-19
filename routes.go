@@ -1,5 +1,5 @@
 package main
 
 type Routes struct {
-	routes []string
+	routes []string // slice of web app routes
 }

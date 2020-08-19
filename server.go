@@ -14,7 +14,7 @@ func init() {
 
 	// loads values from .env into the system
 	if err := godotenv.Load(); err != nil {
-		log.Print("No .env file found")
+		log.Println("No .env file found")
 	}
 }
 
@@ -28,6 +28,26 @@ func main() {
 	pass, exists := os.LookupEnv("PASSWORD")
 	if !exists {
 		log.Println("Env variable PASSWORD does not exist!")
+	}
+
+	httpPort, exists := os.LookupEnv("HTTP_PORT")
+	if !exists {
+		log.Println("Env variable HTTP_PORT does not exist!")
+	}
+
+	httpsPort, exists := os.LookupEnv("HTTPS_PORT")
+	if !exists {
+		log.Println("Env variable HTTPS_PORT does not exist!")
+	}
+
+	tlsCert, exists := os.LookupEnv("TLS_CERT_PATH")
+	if !exists {
+		log.Println("Env variable TLS_CERT_PATH does not exist!")
+	}
+
+	tlsKey, exists := os.LookupEnv("TLS_KEY_PATH")
+	if !exists {
+		log.Println("Env variable TLS_KEY_PATH does not exist!")
 	}
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.MinCost)
@@ -46,6 +66,7 @@ func main() {
 		Name: "",
 	}
 
+	// list of all routes in app
 	r := &Routes{
 		routes: []string{"/", "/login", "/logout", "/error", "/user"},
 	}
@@ -64,7 +85,7 @@ func main() {
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
 	// Redirect HTTP requests to HTTPS
-	go http.ListenAndServe(":8080", showLog(http.HandlerFunc(redirectToHTTPS)))
+	go http.ListenAndServe(":"+httpPort, showLog(http.HandlerFunc(redirectToHTTPS)))
 
-	log.Fatal(http.ListenAndServeTLS(":4433", "tls/auth.signin.dev+1.pem", "tls/auth.signin.dev+1-key.pem", showLog(secureHeaders(mux))))
+	log.Fatal(http.ListenAndServeTLS(":"+httpsPort, tlsCert, tlsKey, showLog(secureHeaders(mux))))
 }

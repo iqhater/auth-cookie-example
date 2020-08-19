@@ -7,6 +7,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// isAuth middleware handler check cookie session
+// and redirect to the main page if cookie is not setup or invalid credentials
 func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
@@ -38,6 +40,8 @@ func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// validate middleware handler check user login and password.
+// If user login and password are wrong then redirect to the error page
 func (u *User) validate(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
@@ -56,6 +60,7 @@ func (u *User) validate(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// showLog middleware handler shows network data log info
 func showLog(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		log.Printf("%s %s %s %s\n", req.Method, req.RemoteAddr, req.URL.Path, req.Proto)
@@ -63,6 +68,8 @@ func showLog(next http.Handler) http.HandlerFunc {
 	})
 }
 
+// notFound middleware handler check existing routes.
+// If route was not found in list then redirect to the 404 page
 func (r *Routes) notFound(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
@@ -76,6 +83,7 @@ func (r *Routes) notFound(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// secureHeaders middleware handler setup secure headers
 func secureHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("X-XSS-Protection", "1; mode=block")
