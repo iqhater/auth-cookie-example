@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -35,6 +36,9 @@ func pageNotFound(w http.ResponseWriter, req *http.Request) {
 // redirectToHTTPS handler get hostname
 // and redirect to https schema with 301 status code
 func redirectToHTTPS(w http.ResponseWriter, req *http.Request) {
-	host := strings.Split(req.Host, ":")[0]
-	http.Redirect(w, req, "https://"+host+":4433", http.StatusMovedPermanently)
+
+	host := strings.Split(req.Host, ":")[0] + ":"
+	httpsPort := os.Getenv("HTTPS_PORT")
+
+	http.Redirect(w, req, "https://"+host+httpsPort, http.StatusMovedPermanently)
 }
