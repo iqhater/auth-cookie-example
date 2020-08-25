@@ -25,10 +25,9 @@ func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 				// redirect to user page
 				http.Redirect(w, req, "/user", http.StatusSeeOther)
 				return
-			} else {
-				http.Redirect(w, req, "/", http.StatusSeeOther)
-				return
 			}
+			http.Redirect(w, req, "/", http.StatusSeeOther)
+			return
 		}
 
 		// check user is already logged in
