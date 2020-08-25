@@ -1,4 +1,13 @@
-## Simple auth app example with cookie sessions.
+<h1 align="center">Simple auth app example with cookie sessions.</h1>
+<div align="center">
+<a href="https://codecov.io/gh/iqhater/auth-cookie-example">
+  <img src="https://codecov.io/gh/iqhater/auth-cookie-example/branch/develop/graph/badge.svg" alt="code-coverage">
+</a>
+<a href="https://goreportcard.com/report/github.com/iqhater/auth-cookie-example">
+  <img src="https://goreportcard.com/badge/github.com/iqhater/auth-cookie-example?style=flat-square" alt="go-report-card">
+</a>
+</div>
+<hr>
 
 # Description
 App has a one user. See example.env file, where user credentials is located.
