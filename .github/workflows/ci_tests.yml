@@ -9,7 +9,10 @@ jobs:
       - name: Run action step
         uses: actions/checkout@v2
 
+      - name: Run test and save coverage profile
+        run: go test -race -v -coverprofile=coverage.txt -covermode=atomic ./...
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
-          file: ./coverage.xml
+          file: ./coverage.txt

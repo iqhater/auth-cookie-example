@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 #run test with coverage and goes to test_data folder. Must be empty 
-CMD go test -race -v -coverprofile=coverage.xml ./...
+CMD go test -race -v -coverprofile=coverage.txt -covermode=atomic ./...
 
 # build binary without debug info
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='-s -w'
