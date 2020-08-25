@@ -8,7 +8,7 @@ import (
 
 func TestLoginHandlerOK(t *testing.T) {
 
-	req, err := http.NewRequest(http.MethodGet, "/login", nil)
+	req, err := http.NewRequest(http.MethodPost, "/login", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

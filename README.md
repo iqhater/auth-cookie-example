@@ -22,7 +22,7 @@ $ mkcert auth.signin.dev localhost
 
 ### Project URL:
 [http://localhost:8080](https://localhost:8080) (auto redirect to https)
-#### - port specify in .env file
+ - port specify in .env file
 
 # Useful commands
 Build binary with maximum reduced build size.
