@@ -93,3 +93,12 @@ func TestDeleteCookieCorrect(t *testing.T) {
 		t.Errorf("createCookie method wrong session name setup: got %v want %v", s.Name, c.Name)
 	}
 }
+
+func TestNewSessionEmptyValues(t *testing.T) {
+
+	s := NewSession()
+
+	if s.ID != "" || s.Name != "" {
+		t.Errorf("Session struct should be init with empty values: got %v", s)
+	}
+}
