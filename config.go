@@ -7,6 +7,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Config struct contains init environments
+// variables and generated passwordHash
 type Config struct {
 	user         string
 	password     string
@@ -17,6 +19,7 @@ type Config struct {
 	passwordHash []byte
 }
 
+// NewConfig function returns inited server configuration
 func NewConfig() *Config {
 
 	user, exists := os.LookupEnv("LOGIN")

@@ -49,7 +49,7 @@ func (s *Session) deleteCookie(w http.ResponseWriter) {
 	s.Name = ""
 }
 
-// init new session struct with empty values
+// NewSession function init new session struct with empty values
 func NewSession() *Session {
 	return &Session{
 		ID:   "",

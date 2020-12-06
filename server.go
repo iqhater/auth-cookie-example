@@ -18,7 +18,7 @@ func init() {
 
 func main() {
 
-	// init config enviroments
+	// init config environments
 	cfg := NewConfig()
 
 	// init user structure
