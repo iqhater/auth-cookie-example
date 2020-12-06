@@ -11,12 +11,12 @@ jobs:
 
       - name: Setup environments
         env:
-        LOGIN: ${{ secrets.LOGIN }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-        HTTP_PORT: ${{ secrets.HTTP_PORT }}
-        HTTPS_PORT: ${{ secrets.HTTPS_PORT }}
-        TLS_CERT_PATH: ${{ secrets.TLS_CERT_PATH }}
-        TLS_KEY_PATH: ${{ secrets.TLS_KEY_PATH}}
+          LOGIN: ${{ secrets.LOGIN }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          HTTP_PORT: ${{ secrets.HTTP_PORT }}
+          HTTPS_PORT: ${{ secrets.HTTPS_PORT }}
+          TLS_CERT_PATH: ${{ secrets.TLS_CERT_PATH }}
+          TLS_KEY_PATH: ${{ secrets.TLS_KEY_PATH}}
         run: |
           echo "LOGIN=$LOGIN" >> .env
           echo "PASSWORD=$PASSWORD" >> .env
