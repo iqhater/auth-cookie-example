@@ -1,11 +1,10 @@
 <h1 align="center">Simple auth app example with cookie sessions.</h1>
 <div align="center">
-<a href="https://codecov.io/gh/iqhater/auth-cookie-example">
-  <img src="https://codecov.io/gh/iqhater/auth-cookie-example/branch/master/graph/badge.svg" />
-</a>
-<a href="https://goreportcard.com/report/github.com/iqhater/auth-cookie-example">
-  <img src="https://goreportcard.com/badge/github.com/iqhater/auth-cookie-example?style=flat-square" alt="go-report-card">
-</a>
+
+![Tests](https://github.com/iqhater/auth-cookie-example/workflows/Tests/badge.svg)
+[![codecov](https://codecov.io/gh/iqhater/auth-cookie-example/branch/master/graph/badge.svg)](https://codecov.io/gh/iqhater/auth-cookie-example)
+[![go report](https://goreportcard.com/badge/github.com/iqhater/auth-cookie-example?style=flat-square)](https://goreportcard.com/report/github.com/iqhater/auth-cookie-example)
+
 </div>
 <hr>
 

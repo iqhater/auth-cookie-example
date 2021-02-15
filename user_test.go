@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestNewUserNotEmptyData(t *testing.T) {
 
@@ -8,6 +10,6 @@ func TestNewUserNotEmptyData(t *testing.T) {
 	u := NewUser(cfg)
 
 	if u.login == "" || u.password == "" || string(u.passwordHash) == "" {
-		t.Errorf("User struct should not have an empty values: got %v", u)
+		t.Errorf("User struct should not have an empty values: got %+v", u)
 	}
 }

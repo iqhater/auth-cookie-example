@@ -1,12 +1,19 @@
-name: CI Job
-on: [push]
+name: Tests
+on: [push, pull_request]
 
 jobs:
   run_tests:
-    runs-on: ubuntu-latest
-    name: A job to run in docker container
+    strategy:
+      matrix:
+        go-version: [1.14.x, 1.15.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Run action step
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup environments
