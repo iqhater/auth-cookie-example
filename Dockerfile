@@ -24,6 +24,7 @@ FROM scratch
 
 # copy golang binary into container
 COPY --from=builder /app/auth_sign_in /app/
+COPY --from=builder /app/public /app/public
 
 # Specify the container's entrypoint as the action
 ENTRYPOINT ["/app/auth_sign_in"]
