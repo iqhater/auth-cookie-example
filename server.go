@@ -43,10 +43,14 @@ func main() {
 
 	mux.Handle("./favicon.ico", http.NotFoundHandler())
 
-	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
 
-	// Redirect HTTP requests to HTTPS
-	go http.ListenAndServe(":"+cfg.httpPort, showLog(http.HandlerFunc(redirectToHTTPS)))
+	if cfg.forcedTLS {
+		// Redirect HTTP requests to HTTPS
+		go http.ListenAndServe(":"+cfg.httpPort, showLog(http.HandlerFunc(redirectToHTTPS)))
 
-	log.Fatal(http.ListenAndServeTLS(":"+cfg.httpsPort, cfg.tlsCert, cfg.tlsKey, showLog(secureHeaders(mux))))
+		log.Fatal(http.ListenAndServeTLS(":"+cfg.httpsPort, cfg.tlsCert, cfg.tlsKey, showLog(secureHeaders(mux))))
+	} else {
+		log.Fatal(http.ListenAndServe(":"+cfg.httpPort, showLog(secureHeaders(mux))))
+	}
 }

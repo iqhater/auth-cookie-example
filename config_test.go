@@ -16,7 +16,7 @@ func TestNewConfigNotEmptyData(t *testing.T) {
 
 func TestNewConfigEmptyData(t *testing.T) {
 
-	envs := []string{"LOGIN", "PASSWORD", "HTTP_PORT", "HTTPS_PORT", "TLS_CERT_PATH", "TLS_KEY_PATH"}
+	envs := []string{"LOGIN", "PASSWORD", "HTTP_PORT", "HTTPS_PORT", "TLS_CERT_PATH", "TLS_KEY_PATH", "FORCED_TLS"}
 	envsBuffer := make(map[string]string)
 
 	// clear environments variables
@@ -31,7 +31,7 @@ func TestNewConfigEmptyData(t *testing.T) {
 
 	cfg := NewConfig()
 
-	if cfg.user != "" || cfg.password != "" || cfg.httpPort != "" || cfg.httpsPort != "" || cfg.tlsCert != "" || cfg.tlsKey != "" {
+	if cfg.user != "" || cfg.password != "" || cfg.httpPort != "" || cfg.httpsPort != "" || cfg.tlsCert != "" || cfg.tlsKey != "" || cfg.forcedTLS {
 		t.Errorf("Config struct should be an empty values: got %v", cfg)
 	}
 

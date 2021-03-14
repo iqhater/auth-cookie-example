@@ -2,8 +2,11 @@ FROM golang:alpine3.12 as builder
 
 # enable go modules
 ENV GO111MODULE=on
+ENV PORT=5050
 
 WORKDIR /app
+# RUN apk update && apk upgrade && apk add --no-cache ca-certificates
+# RUN update-ca-certificates
 
 COPY go.mod .
 COPY go.sum .
@@ -24,7 +27,6 @@ FROM scratch
 
 # copy golang binary into container
 COPY --from=builder /app/auth_sign_in /app/
-COPY --from=builder /app/public /app/public
 
 # Specify the container's entrypoint as the action
 ENTRYPOINT ["/app/auth_sign_in"]

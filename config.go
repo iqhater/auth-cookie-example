@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -16,6 +17,7 @@ type Config struct {
 	httpsPort    string
 	tlsCert      string
 	tlsKey       string
+	forcedTLS    bool
 	passwordHash []byte
 }
 
@@ -52,6 +54,19 @@ func NewConfig() *Config {
 		log.Println("Env variable TLS_KEY_PATH does not exist!")
 	}
 
+	forcedTLSString, exists := os.LookupEnv("FORCED_TLS")
+	if !exists {
+		log.Println("Env variable FORCED_TLS does not exist!")
+	}
+
+	forcedTLS, err := strconv.ParseBool(forcedTLSString)
+	if err != nil {
+		log.Println(err)
+
+		// set default to false
+		forcedTLS = false
+	}
+
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
 		log.Fatal(err)
@@ -64,6 +79,7 @@ func NewConfig() *Config {
 		httpsPort,
 		tlsCert,
 		tlsKey,
+		forcedTLS,
 		passwordHash,
 	}
 }
