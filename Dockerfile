@@ -1,3 +1,6 @@
+# docker build --rm -t iqhater/auth_sign_in_local:latest .
+# docker run --env-file .env -p 8080:8080 --rm -it iqhater/auth_sign_in_local:latest
+
 FROM golang:alpine3.12 as builder
 
 # enable go modules
@@ -25,8 +28,11 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='-s -w'
 # generate clean, final image
 FROM scratch
 
+WORKDIR /app
+
 # copy golang binary into container
 COPY --from=builder /app/auth_sign_in /app/
+COPY --from=builder /app/public /app/public
 
 # Specify the container's entrypoint as the action
 ENTRYPOINT ["/app/auth_sign_in"]
