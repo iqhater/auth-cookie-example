@@ -32,6 +32,7 @@ func (s *Session) isAuth(next http.HandlerFunc) http.HandlerFunc {
 
 		// check user is already logged in
 		if s.ID != c.Value || s.Name != c.Name {
+			s.deleteCookie(w)
 			http.Redirect(w, req, "/", http.StatusSeeOther)
 			return
 		}

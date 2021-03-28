@@ -2,3 +2,4 @@
 auth_sign_in
 /tls
 coverage.txt
+.vscode
