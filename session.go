@@ -21,7 +21,6 @@ func (s *Session) createCookie() *http.Cookie {
 	c := &http.Cookie{
 		Name:     "session",
 		Value:    id.String(),
-		Path:     "/user",
 		Secure:   true, // https
 		HttpOnly: true,
 		SameSite: http.SameSiteStrictMode,
@@ -39,7 +38,6 @@ func (s *Session) deleteCookie(w http.ResponseWriter) {
 	c := &http.Cookie{
 		Name:     "session",
 		Value:    "",
-		Path:     "",
 		MaxAge:   -1,
 		Secure:   true,
 		HttpOnly: true,
