@@ -1,34 +1,33 @@
 body {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    line-height: 1.47;
-    letter-spacing: 0.03em;
-    font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.47;
+  letter-spacing: 0.03em;
+  font-family: monospace;
 }
 
 h1 {
-    color: #1f976f;
+  color: #1f976f;
 }
 
 p {
-    width: 55vw;
-    color: rgb(80, 80, 80);
+  width: 55vw;
+  color: rgb(80, 80, 80);
 }
 
 img {
-    width: 160px;
-    float: right;
+  width: 160px;
+  float: right;
 }
 
 #signout {
-    display: block;
-    width: 90px;
-    height: 25px;
+  display: block;
+  width: 90px;
+  height: 25px;
 }
 
 #signout:hover {
-    cursor: pointer;
+  cursor: pointer;
 }

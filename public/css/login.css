@@ -1,32 +1,31 @@
 body {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    line-height: 1.47;
-    letter-spacing: 0.03em;
-    font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.47;
+  letter-spacing: 0.03em;
+  font-family: monospace;
 }
 
 h2 {
-    color: #14586e;
+  color: #14586e;
 }
 
 input {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
-input[type=submit] {
-    width: 90px;
-    height: 25px;
+input[type="submit"] {
+  width: 90px;
+  height: 25px;
 }
 
 #signin {
-    display: block;
-    margin: auto;
+  display: block;
+  margin: auto;
 }
 
 #signin:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
