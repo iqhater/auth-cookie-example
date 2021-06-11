@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"os"
+	"path"
 	"testing"
 
 	"golang.org/x/crypto/bcrypt"
@@ -30,7 +31,7 @@ func TestIsAuthMiddleware(t *testing.T) {
 
 		// check user is already logged in
 		if s.ID != c.Value || s.Name != c.Name {
-			t.Errorf("Cookie with name 'session' not found in request: got %q", err)
+			t.Errorf("Session id or session's name are equal: got %q", err)
 		}
 	}
 
@@ -185,7 +186,7 @@ func TestValidateMiddlewareInvalid(t *testing.T) {
 
 	rr := httptest.NewRecorder()
 
-	handler := u.validate((validateHandler))
+	handler := u.validate(validateHandler)
 	handler(rr, req)
 
 	if rr.Result().StatusCode != http.StatusSeeOther {
@@ -278,6 +279,145 @@ func TestNotFoundMiddleware(t *testing.T) {
 	if rr.Result().StatusCode != http.StatusOK {
 		t.Error("Wrong status code!")
 	}
+}
+
+func TestSecureFilesNotAuthorizedMiddleware(t *testing.T) {
+
+	// s := &Session{}
+
+	r := Routes{
+		// Session: s,
+		files: []string{"user.html", "gopher_wizard.png"},
+	}
+
+	req, err := http.NewRequest(http.MethodGet, "/public/img/gopher_wizard.png", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	secureFilesHandler := func(w http.ResponseWriter, req *http.Request) {
+
+		for _, file := range r.files {
+			if path.Base(req.URL.Path) == file {
+
+				_, err := req.Cookie("session")
+				if err == nil {
+					t.Errorf("Cookie with name 'session' should not exist in request: got %q", err)
+				}
+
+				// check user is already logged in
+				/* if r.ID != c.Value || r.Name != c.Name {
+					t.Errorf("Session id or session's name are equal: got %q", err)
+				} */
+				return
+			}
+		}
+	}
+
+	rr := httptest.NewRecorder()
+
+	handler := r.secureFiles(http.HandlerFunc(secureFilesHandler))
+	// secureFilesHandler(rr, req)
+	handler.ServeHTTP(rr, req)
+
+	// expected := r.ID
+	// cookie, _ := req.Cookie("session")
+
+	/* if cookie.String() != expected {
+		t.Errorf("handler returned wrong status code: got %v want %v", cookie, expected)
+	} */
+
+	if rr.Result().StatusCode != http.StatusSeeOther {
+		t.Error("Wrong redirect status code!")
+	}
+}
+
+func TestSecureFilesNotInListMiddleware(t *testing.T) {
+
+	r := Routes{
+		files: []string{"gopher_wizard.png"},
+	}
+
+	req, err := http.NewRequest(http.MethodGet, "/public/img/fake_wizard.png", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	secureFilesHandler := func(w http.ResponseWriter, req *http.Request) {
+
+		for _, file := range r.files {
+			if path.Base(req.URL.Path) == file {
+
+				_, err := req.Cookie("session")
+				if err == nil {
+					t.Errorf("Cookie with name 'session' should not exist in request: got %q", err)
+				}
+				return
+			}
+		}
+	}
+
+	rr := httptest.NewRecorder()
+
+	handler := r.secureFiles(http.HandlerFunc(secureFilesHandler))
+	handler.ServeHTTP(rr, req)
+
+	if rr.Result().StatusCode != http.StatusOK {
+		t.Error("Wrong redirect status code!", rr.Result().StatusCode)
+	}
+}
+
+func TestSecureFilesAuthorizedMiddleware(t *testing.T) {
+
+	s := &Session{}
+
+	r := Routes{
+		Session: s,
+		files:   []string{"user.html", "gopher_wizard.png"},
+	}
+
+	req, err := http.NewRequest(http.MethodGet, "/public/img/gopher_wizard.png", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	http.SetCookie(rr, r.createCookie())
+
+	req.Header.Set("Cookie", rr.HeaderMap["Set-Cookie"][0])
+
+	secureFilesHandler := func(w http.ResponseWriter, req *http.Request) {
+
+		for _, file := range r.files {
+			if path.Base(req.URL.Path) == file {
+
+				c, err := req.Cookie("session")
+				if err != nil {
+					t.Errorf("Cookie with name 'session' not exist in request: got %q", err)
+				}
+
+				//TODO: cover test case
+				if r.ID != c.Value || r.Name != c.Name {
+					t.Errorf("Session id or session's name are equal: got %q", err)
+				}
+				return
+			}
+		}
+	}
+
+	handler := r.secureFiles(http.HandlerFunc(secureFilesHandler))
+	handler.ServeHTTP(rr, req)
+
+	expected := r.ID
+	cookie := rr.Result().Cookies()[0].Value
+
+	if cookie != expected {
+		t.Errorf("handler returned wrong cookie: got %v want %v", cookie, expected)
+	}
+
+	/* if rr.Result().StatusCode != http.StatusSeeOther {
+		t.Error("Wrong redirect status code!")
+	} */
 }
 
 func TestSecureHeadersMiddleware(t *testing.T) {

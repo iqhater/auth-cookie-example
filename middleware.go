@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"path"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -81,6 +82,36 @@ func (r *Routes) notFound(next http.HandlerFunc) http.HandlerFunc {
 		}
 		http.Redirect(w, req, "/404", http.StatusSeeOther)
 	}
+}
+
+// secureFiles middleware handler protect your public folder files from unauthorized users
+// by check session and corresponding files and redirect to 404 page
+func (r *Routes) secureFiles(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+
+		for _, file := range r.files {
+
+			if path.Base(req.URL.Path) == file {
+
+				// check session if user already logged in
+				c, err := req.Cookie("session")
+				if err != nil {
+					http.Redirect(w, req, "/404", http.StatusSeeOther)
+					return
+				}
+
+				// check user is already logged in
+				if r.ID != c.Value || r.Name != c.Name {
+					r.deleteCookie(w)
+					http.Redirect(w, req, "/404", http.StatusSeeOther)
+					return
+				}
+				next.ServeHTTP(w, req)
+				return
+			}
+		}
+		next.ServeHTTP(w, req)
+	})
 }
 
 // secureHeaders middleware handler setup secure headers

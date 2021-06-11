@@ -27,9 +27,12 @@ func main() {
 	// init session structure
 	s := NewSession()
 
-	// list of all routes in app
+	// routes: list of all routes in app
+	// files: list of all files in public folder if you want to protect from anonymous users
 	r := &Routes{
-		routes: []string{"/", "/login", "/logout", "/error", "/user"},
+		Session: s,
+		routes:  []string{"/", "/login", "/logout", "/error", "/user"},
+		files:   []string{"user.html", "user.css", "gopher_wizard.png"},
 	}
 
 	mux := http.NewServeMux()
@@ -42,8 +45,7 @@ func main() {
 	mux.HandleFunc("/404", pageNotFound)
 
 	mux.Handle("./favicon.ico", http.NotFoundHandler())
-
-	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
+	mux.Handle("/public/", r.secureFiles(http.StripPrefix("/public/", http.FileServer(http.Dir("./public")))))
 
 	if cfg.forcedTLS {
 		// Redirect HTTP requests to HTTPS
