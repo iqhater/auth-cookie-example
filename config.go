@@ -24,40 +24,13 @@ type Config struct {
 // NewConfig function returns inited server configuration
 func NewConfig() *Config {
 
-	user, exists := os.LookupEnv("LOGIN")
-	if !exists {
-		log.Println("Env variable LOGIN does not exist!")
-	}
-
-	password, exists := os.LookupEnv("PASSWORD")
-	if !exists {
-		log.Println("Env variable PASSWORD does not exist!")
-	}
-
-	httpPort, exists := os.LookupEnv("HTTP_PORT")
-	if !exists {
-		log.Println("Env variable HTTP_PORT does not exist!")
-	}
-
-	httpsPort, exists := os.LookupEnv("HTTPS_PORT")
-	if !exists {
-		log.Println("Env variable HTTPS_PORT does not exist!")
-	}
-
-	tlsCert, exists := os.LookupEnv("TLS_CERT_PATH")
-	if !exists {
-		log.Println("Env variable TLS_CERT_PATH does not exist!")
-	}
-
-	tlsKey, exists := os.LookupEnv("TLS_KEY_PATH")
-	if !exists {
-		log.Println("Env variable TLS_KEY_PATH does not exist!")
-	}
-
-	forcedTLSString, exists := os.LookupEnv("FORCED_TLS")
-	if !exists {
-		log.Println("Env variable FORCED_TLS does not exist!")
-	}
+	user := getEnv("LOGIN")
+	password := getEnv("PASSWORD")
+	httpPort := getEnv("HTTP_PORT")
+	httpsPort := getEnv("HTTPS_PORT")
+	tlsCert := getEnv("TLS_CERT_PATH")
+	tlsKey := getEnv("TLS_KEY_PATH")
+	forcedTLSString := getEnv("FORCED_TLS")
 
 	forcedTLS, err := strconv.ParseBool(forcedTLSString)
 	if err != nil {
@@ -82,4 +55,14 @@ func NewConfig() *Config {
 		forcedTLS,
 		passwordHash,
 	}
+}
+
+// getEnv wrapper function to get a value from environment
+func getEnv(key string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		log.Printf("Env variable %s does not exist!\n", key)
+		return ""
+	}
+	return value
 }
