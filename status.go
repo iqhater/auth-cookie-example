@@ -2,7 +2,7 @@ package main
 
 import "net/http"
 
-// Custom StatusHTTP struct for show response status code in log middleware
+// StatusHTTP custom struct for show response status code in log middleware
 type StatusHTTP struct {
 	http.ResponseWriter
 	StatusCode int
