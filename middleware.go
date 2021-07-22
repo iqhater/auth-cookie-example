@@ -64,8 +64,12 @@ func (u *User) validate(next http.HandlerFunc) http.HandlerFunc {
 // showLog middleware handler shows network data log info
 func showLog(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		log.Printf("%s %s %s %s\n", req.Method, req.RemoteAddr, req.URL.Path, req.Proto)
-		next.ServeHTTP(w, req)
+
+		sr := NewStatusHTTP(w)
+		next.ServeHTTP(sr, req)
+
+		statusCode := sr.StatusCode
+		log.Printf("%s %s %s %s [%d: %s]\n", req.Method, req.RemoteAddr, req.URL.Path, req.Proto, statusCode, http.StatusText(statusCode))
 	})
 }
 
@@ -96,14 +100,14 @@ func (r *Routes) secureFiles(next http.Handler) http.Handler {
 				// check session if user already logged in
 				c, err := req.Cookie("session")
 				if err != nil {
-					http.Redirect(w, req, "/404", http.StatusSeeOther)
+					http.Error(w, "Forbidden", http.StatusForbidden)
 					return
 				}
 
 				// check user is already logged in
 				if r.ID != c.Value || r.Name != c.Name {
 					r.deleteCookie(w)
-					http.Redirect(w, req, "/404", http.StatusSeeOther)
+					http.Error(w, "Forbidden", http.StatusForbidden)
 					return
 				}
 				next.ServeHTTP(w, req)

@@ -327,7 +327,7 @@ func TestSecureFilesNotAuthorizedMiddleware(t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v", cookie, expected)
 	} */
 
-	if rr.Result().StatusCode != http.StatusSeeOther {
+	if rr.Result().StatusCode != http.StatusForbidden {
 		t.Error("Wrong redirect status code!")
 	}
 }
