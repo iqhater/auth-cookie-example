@@ -1,9 +1,12 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
+	"os"
 	"path"
+	"text/tabwriter"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -64,12 +67,16 @@ func (u *User) validate(next http.HandlerFunc) http.HandlerFunc {
 // showLog middleware handler shows network data log info
 func showLog(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		t := time.Now()
 
 		sr := NewStatusHTTP(w)
 		next.ServeHTTP(sr, req)
 
 		statusCode := sr.StatusCode
-		log.Printf("%s %s %s %s [%d: %s]\n", req.Method, req.RemoteAddr, req.URL.Path, req.Proto, statusCode, http.StatusText(statusCode))
+
+		tw := tabwriter.NewWriter(os.Stdout, 28, 4, 1, ' ', tabwriter.Debug)
+		fmt.Fprintf(tw, "%v\t [%d: %s]\t %v\t %s\t %s\t %s\n", t.Format("02.01.2006 15:04:05"), statusCode, http.StatusText(statusCode), time.Since(t), req.RemoteAddr, req.Method, req.URL.String())
+		tw.Flush()
 	})
 }
 
