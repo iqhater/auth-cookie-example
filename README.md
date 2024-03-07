@@ -12,13 +12,13 @@
 
 App has a one user. See example.env file, where user credentials is located.
 
-[Live demo](https://cookie.fulldev.xyz)
+[Live demo](https://cookie.fulldev.space)
 
 ### Screenshot
 
 ![Screenshot](./auth_user_page.png)
 
-## Prepare project data:
+## Prepare project data
 
 - Create .env file in the root of project and paste inside your user credentials, ports and certificates path. (See example.env file)
 
@@ -29,10 +29,10 @@ App has a one user. See example.env file, where user credentials is located.
 Convenient way to do that with a great [mkcert](https://github.com/FiloSottile/mkcert) tool.
 
 ```
-$ mkcert auth.signin.dev localhost
+mkcert auth.signin.dev localhost
 ```
 
-### Project URL:
+### Project URL
 
 [http://localhost:8080](https://localhost:8080) (auto redirect to https)
 
@@ -45,6 +45,6 @@ Build binary with maximum reduced build size.
 ### Reduce build size
 
 ```
-$ go build -ldflags "-s -w"
-$ upx -f --brute -o build_name.upx build_name
+go build -ldflags "-s -w"
+upx -f --brute -o build_name.upx build_name
 ```

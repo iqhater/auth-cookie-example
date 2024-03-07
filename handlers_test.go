@@ -135,6 +135,29 @@ func TestPageNotFoundHandlerOK(t *testing.T) {
 	}
 }
 
+func TestPageNotFoundHandlerStatusNotFound(t *testing.T) {
+
+	req, err := http.NewRequest(http.MethodGet, "/404", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(pageNotFound)
+
+	handler.ServeHTTP(rr, req)
+
+	// check the status code is 404.
+	if status := rr.Code; status != http.StatusNotFound {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusNotFound)
+	}
+
+	// check the response body is not empty.
+	if rr.Body.Len() == 0 {
+		t.Errorf("handler returned unexpected body length: got %v want %v", rr.Body.Len(), "> 0")
+	}
+}
+
 func TestRedirectToHTTPSHandlerRedirectStatus(t *testing.T) {
 
 	req, err := http.NewRequest(http.MethodGet, "/", nil)

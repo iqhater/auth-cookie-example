@@ -25,11 +25,13 @@ func admin(w http.ResponseWriter, req *http.Request) {
 
 // unAuth handler serve error.html page
 func unAuth(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(http.StatusUnauthorized)
 	http.ServeFile(w, req, "./public/error.html")
 }
 
 // pageNotFound handler serve 404.html page
 func pageNotFound(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
 	http.ServeFile(w, req, "./public/404.html")
 }
 
