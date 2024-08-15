@@ -86,7 +86,7 @@ func TestIsAuthMiddlewareBadCookie(t *testing.T) {
 	rr := httptest.NewRecorder()
 	http.SetCookie(rr, s.createCookie())
 
-	req := &http.Request{Header: http.Header{"Cookie": rr.HeaderMap["Set-Cookie"]}}
+	req := &http.Request{Header: http.Header{"Cookie": []string{rr.Result().Header.Get("Set-Cookie")}}}
 
 	isAuthHandler := func(w http.ResponseWriter, r *http.Request) {
 
@@ -384,7 +384,7 @@ func TestSecureFilesAuthorizedMiddleware(t *testing.T) {
 	rr := httptest.NewRecorder()
 	http.SetCookie(rr, r.createCookie())
 
-	req.Header.Set("Cookie", rr.HeaderMap["Set-Cookie"][0])
+	req.Header.Set("Cookie", rr.Result().Header.Get("Set-Cookie"))
 
 	secureFilesHandler := func(w http.ResponseWriter, req *http.Request) {
 
