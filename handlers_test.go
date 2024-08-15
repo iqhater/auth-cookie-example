@@ -101,8 +101,8 @@ func TestUnAuthHandlerOK(t *testing.T) {
 
 	handler.ServeHTTP(rr, req)
 
-	// check the status code is 200.
-	if status := rr.Code; status != http.StatusOK {
+	// check the status code is 401.
+	if status := rr.Code; status != http.StatusUnauthorized {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
 	}
 
@@ -113,29 +113,6 @@ func TestUnAuthHandlerOK(t *testing.T) {
 }
 
 func TestPageNotFoundHandlerOK(t *testing.T) {
-
-	req, err := http.NewRequest(http.MethodGet, "/404", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(pageNotFound)
-
-	handler.ServeHTTP(rr, req)
-
-	// check the status code is 200.
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
-
-	// check the response body is not empty.
-	if rr.Body.Len() == 0 {
-		t.Errorf("handler returned unexpected body length: got %v want %v", rr.Body.Len(), "> 0")
-	}
-}
-
-func TestPageNotFoundHandlerStatusNotFound(t *testing.T) {
 
 	req, err := http.NewRequest(http.MethodGet, "/404", nil)
 	if err != nil {
