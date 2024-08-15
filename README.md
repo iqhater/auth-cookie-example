@@ -28,7 +28,7 @@ App has a one user. See example.env file, where user credentials is located.
 
 Convenient way to do that with a great [mkcert](https://github.com/FiloSottile/mkcert) tool.
 
-```
+```bash
 mkcert auth.signin.dev localhost
 ```
 
@@ -44,7 +44,7 @@ Build binary with maximum reduced build size.
 
 ### Reduce build size
 
-```
+```bash
 go build -ldflags "-s -w"
 upx -f --brute -o build_name.upx build_name
 ```
