@@ -20,6 +20,7 @@ jobs:
         env:
           LOGIN: ${{ secrets.LOGIN }}
           PASSWORD: ${{ secrets.PASSWORD }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
           HTTP_PORT: ${{ secrets.HTTP_PORT }}
           HTTPS_PORT: ${{ secrets.HTTPS_PORT }}
           TLS_CERT_PATH: ${{ secrets.TLS_CERT_PATH }}
@@ -28,6 +29,7 @@ jobs:
         run: |
           echo "LOGIN=$LOGIN" >> .env
           echo "PASSWORD=$PASSWORD" >> .env
+          echo "SECRET_KEY=$SECRET_KEY" >> .env
           echo "HTTP_PORT=$HTTP_PORT" >> .env
           echo "HTTPS_PORT=$HTTPS_PORT" >> .env
           echo "TLS_CERT_PATH=$TLS_CERT_PATH" >> .env
