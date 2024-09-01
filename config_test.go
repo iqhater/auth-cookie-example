@@ -9,14 +9,14 @@ func TestNewConfigNotEmptyData(t *testing.T) {
 
 	cfg := NewConfig()
 
-	if cfg.user == "" || cfg.password == "" || cfg.httpPort == "" || cfg.httpsPort == "" || cfg.tlsCert == "" || cfg.tlsKey == "" || string(cfg.passwordHash) == "" {
+	if cfg.user == "" || cfg.password == "" || cfg.secretKey == "" || cfg.httpPort == "" || cfg.httpsPort == "" || cfg.tlsCert == "" || cfg.tlsKey == "" || string(cfg.passwordHash) == "" {
 		t.Errorf("Config struct should not have an empty values: got %v", cfg)
 	}
 }
 
 func TestNewConfigEmptyData(t *testing.T) {
 
-	envs := []string{"LOGIN", "PASSWORD", "HTTP_PORT", "HTTPS_PORT", "TLS_CERT_PATH", "TLS_KEY_PATH", "FORCED_TLS"}
+	envs := []string{"LOGIN", "PASSWORD", "SECRET_KEY", "HTTP_PORT", "HTTPS_PORT", "TLS_CERT_PATH", "TLS_KEY_PATH", "FORCED_TLS"}
 	envsBuffer := make(map[string]string)
 
 	// clear environments variables
@@ -31,7 +31,7 @@ func TestNewConfigEmptyData(t *testing.T) {
 
 	cfg := NewConfig()
 
-	if cfg.user != "" || cfg.password != "" || cfg.httpPort != "" || cfg.httpsPort != "" || cfg.tlsCert != "" || cfg.tlsKey != "" || cfg.forcedTLS {
+	if cfg.user != "" || cfg.password != "" || cfg.secretKey != "" || cfg.httpPort != "" || cfg.httpsPort != "" || cfg.tlsCert != "" || cfg.tlsKey != "" || cfg.forcedTLS {
 		t.Errorf("Config struct should be an empty values: got %v", cfg)
 	}
 
@@ -44,7 +44,7 @@ func TestNewConfigEmptyData(t *testing.T) {
 
 func TestNewConfigEnvsNotExist(t *testing.T) {
 
-	envs := []string{"LOGIN", "PASSWORD", "HTTP_PORT", "HTTPS_PORT", "TLS_CERT_PATH", "TLS_KEY_PATH", "FORCED_TLS"}
+	envs := []string{"LOGIN", "PASSWORD", "SECRET_KEY", "HTTP_PORT", "HTTPS_PORT", "TLS_CERT_PATH", "TLS_KEY_PATH", "FORCED_TLS"}
 	envsBuffer := make(map[string]string)
 
 	// clear environments variables
@@ -80,7 +80,7 @@ func TestNewConfigEnvsNotExist(t *testing.T) {
 
 func TestGetEnvExist(t *testing.T) {
 
-	envs := []string{"LOGIN", "PASSWORD", "HTTP_PORT", "HTTPS_PORT", "TLS_CERT_PATH", "TLS_KEY_PATH", "FORCED_TLS"}
+	envs := []string{"LOGIN", "PASSWORD", "SECRET_KEY", "HTTP_PORT", "HTTPS_PORT", "TLS_CERT_PATH", "TLS_KEY_PATH", "FORCED_TLS"}
 
 	for _, env := range envs {
 
@@ -93,7 +93,7 @@ func TestGetEnvExist(t *testing.T) {
 
 func TestGetEnvNotExist(t *testing.T) {
 
-	envs := []string{"FAKE_LOGIN", "FAKE_PASSWORD", "FAKE_PORT"}
+	envs := []string{"FAKE_LOGIN", "FAKE_PASSWORD", "FAKE_SECRET_KEY", "FAKE_PORT"}
 
 	for _, env := range envs {
 

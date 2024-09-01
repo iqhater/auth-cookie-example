@@ -21,9 +21,30 @@ input[type="submit"] {
   height: 25px;
 }
 
+fieldset {
+  display: flex;
+  position: absolute;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.radio {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 5px 0;
+  width: 50%;
+}
+
+.radio label,
+input[type="radio"] {
+  cursor: pointer;
+}
+
 #signin {
   display: block;
-  margin: auto;
+  margin: 60px auto;
 }
 
 #signin:hover {

@@ -20,6 +20,20 @@
         <br>
         <input id="password" type="password" name="password" minlength="8" placeholder="goroutine" required>
         <br>
+
+        <fieldset>
+            <legend>Select authentication type:</legend>
+
+            <div class="radio">
+                <input type="radio" id="cookie" name="authType" value="session" checked>
+                <label for="cookie">Cookie</label>
+            </div>
+            <div class="radio">
+                <input type="radio" id="token" name="authType" value="token">
+                <label for="token">JWT</label>
+            </div>
+        </fieldset>
+
         <input id="signin" type="submit" value="Sign in">
     </form>
 </body>

@@ -50,27 +50,23 @@ func TestIsAuthMiddleware(t *testing.T) {
 
 func TestIsAuthMiddlewareCookieNotSet(t *testing.T) {
 
-	s := Session{}
-
-	req, err := http.NewRequest(http.MethodPost, "/user", nil)
-	if err != nil {
-		t.Fatal(err)
+	s := Session{
+		AuthType: AuthTypeCookie,
 	}
 
-	isAuthHandler := func(w http.ResponseWriter, r *http.Request) {
-		http.SetCookie(w, s.createCookie())
-	}
+	req := httptest.NewRequest(http.MethodPost, "/user", nil)
+
+	isAuthHandler := func(w http.ResponseWriter, r *http.Request) {}
 
 	rr := httptest.NewRecorder()
 
-	handler := s.isAuth(isAuthHandler)
+	handler := s.setCookie(s.isAuth(isAuthHandler))
 	handler(rr, req)
 
-	name := "session"
-	cookie, _ := req.Cookie(name)
+	cookie, _ := req.Cookie(s.AuthType)
 	val := rr.Result().Cookies()[0].Value
 
-	if s.ID != val || s.Name != name {
+	if s.ID != val || s.Name != s.AuthType {
 		t.Errorf("handler returned wrong status code: got %v want %v", cookie, s.ID)
 	}
 
@@ -81,7 +77,9 @@ func TestIsAuthMiddlewareCookieNotSet(t *testing.T) {
 
 func TestIsAuthMiddlewareBadCookie(t *testing.T) {
 
-	s := Session{}
+	s := Session{
+		AuthType: AuthTypeCookie,
+	}
 
 	rr := httptest.NewRecorder()
 	http.SetCookie(rr, s.createCookie())
@@ -283,11 +281,13 @@ func TestNotFoundMiddleware(t *testing.T) {
 
 func TestSecureFilesNotAuthorizedMiddleware(t *testing.T) {
 
-	// s := &Session{}
+	s := &Session{
+		AuthType: AuthTypeCookie,
+	}
 
 	r := Routes{
-		// Session: s,
-		files: []string{"user.html", "gopher_wizard.png"},
+		Session: s,
+		files:   []string{"user.html", "gopher_wizard.png"},
 	}
 
 	req, err := http.NewRequest(http.MethodGet, "/public/img/gopher_wizard.png", nil)
@@ -300,15 +300,15 @@ func TestSecureFilesNotAuthorizedMiddleware(t *testing.T) {
 		for _, file := range r.files {
 			if path.Base(req.URL.Path) == file {
 
-				_, err := req.Cookie("session")
+				c, err := req.Cookie(s.AuthType)
 				if err == nil {
 					t.Errorf("Cookie with name 'session' should not exist in request: got %q", err)
 				}
 
 				// check user is already logged in
-				/* if r.ID != c.Value || r.Name != c.Name {
+				if r.ID != c.Value || r.Name != c.Name {
 					t.Errorf("Session id or session's name are equal: got %q", err)
-				} */
+				}
 				return
 			}
 		}
@@ -317,15 +317,14 @@ func TestSecureFilesNotAuthorizedMiddleware(t *testing.T) {
 	rr := httptest.NewRecorder()
 
 	handler := r.secureFiles(http.HandlerFunc(secureFilesHandler))
-	// secureFilesHandler(rr, req)
 	handler.ServeHTTP(rr, req)
 
-	// expected := r.ID
-	// cookie, _ := req.Cookie("session")
+	expected := r.ID
+	cookie, _ := req.Cookie(s.AuthType)
 
-	/* if cookie.String() != expected {
+	if cookie.String() != expected {
 		t.Errorf("handler returned wrong status code: got %v want %v", cookie, expected)
-	} */
+	}
 
 	if rr.Result().StatusCode != http.StatusForbidden {
 		t.Error("Wrong redirect status code!")

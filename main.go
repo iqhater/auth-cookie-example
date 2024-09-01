@@ -32,13 +32,13 @@ func main() {
 	r := &Routes{
 		Session: s,
 		routes:  []string{"/", "/login", "/logout", "/error", "/user"},
-		files:   []string{"user.html", "user.css", "gopher_wizard.png"},
+		files:   []string{"user.html", "user.css", "gopher_wizard.png", "cookie_logo.svg", "jwt_logo.svg"},
 	}
 
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", r.notFound(login))
-	mux.HandleFunc("/login", u.validate(s.isAuth(admin)))
+	mux.HandleFunc("/login", s.setAuthType(u.validate(s.setCookie(s.isAuth(admin)))))
 	mux.HandleFunc("/logout", s.isAuth(s.logout))
 	mux.HandleFunc("/user", s.isAuth(admin))
 	mux.HandleFunc("/error", unAuth)

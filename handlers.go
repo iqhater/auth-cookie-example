@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"net/http"
 	"os"
 	"strings"
@@ -14,13 +15,39 @@ func login(w http.ResponseWriter, req *http.Request) {
 // logout handler remove cookie and redirect to main page
 func (s *Session) logout(w http.ResponseWriter, req *http.Request) {
 	s.deleteCookie(w)
+	s.deleteToken(w)
 	http.Redirect(w, req, "/", http.StatusSeeOther)
 }
 
 // admin handler set cache-control header and serve user.html page
 func admin(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Cache-Control", "no-cache, private, max-age=0")
-	http.ServeFile(w, req, "./public/user.html")
+
+	tpl, err := template.ParseFiles("./public/user.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	authType := strings.Split(req.Header.Get("Cookie"), "=")
+
+	renderValues := make(map[string]string)
+
+	if authType[0] == "session" {
+		renderValues["Title"] = "Cookie"
+		renderValues["Image"] = "/public/img/cookie_logo.svg"
+		renderValues["Time"] = "1 minute"
+	}
+
+	if authType[0] == "token" {
+		renderValues["Title"] = "Token"
+		renderValues["Image"] = "/public/img/jwt_logo.svg"
+		renderValues["Time"] = "5 minutes"
+	}
+
+	err = tpl.ExecuteTemplate(w, "user", renderValues)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 // unAuth handler serve error.html page

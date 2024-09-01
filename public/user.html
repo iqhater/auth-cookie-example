@@ -1,3 +1,4 @@
+{{define "user"}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,13 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/public/css/user.css">
-    <title>User Page</title>
+    <title>User {{ .Title }} Page</title>
 </head>
 
 <body>
     <h1>Successful sign in! &#x1F44C</h1>
+    <img src="{{ .Image }}" alt="{{ .Title }}_logo_image" />
     <br>
-    <i><sup style="color:red">*</sup>If you reload page after 1 minute you will be <br>logout and redirected on a login
+    <i><sup style="color:red">*</sup>If you reload page after {{ .Time }} you will be <br>logout and redirected on a login
         page.</i>
     <br>
     <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure nisi odit unde et, labore esse voluptates minus
@@ -36,3 +38,4 @@
 </body>
 
 </html>
+{{end}}

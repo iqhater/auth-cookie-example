@@ -13,6 +13,7 @@ import (
 type Config struct {
 	user         string
 	password     string
+	secretKey    string
 	httpPort     string
 	httpsPort    string
 	tlsCert      string
@@ -26,6 +27,7 @@ func NewConfig() *Config {
 
 	user := getEnv("LOGIN")
 	password := getEnv("PASSWORD")
+	secretKey := getEnv("SECRET_KEY")
 	httpPort := getEnv("HTTP_PORT")
 	httpsPort := getEnv("HTTPS_PORT")
 	tlsCert := getEnv("TLS_CERT_PATH")
@@ -48,6 +50,7 @@ func NewConfig() *Config {
 	return &Config{
 		user,
 		password,
+		secretKey,
 		httpPort,
 		httpsPort,
 		tlsCert,
