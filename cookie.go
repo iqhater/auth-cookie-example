@@ -13,7 +13,7 @@ func (s *Session) createCookie() *http.Cookie {
 	id := uuid.NewV4()
 
 	c := &http.Cookie{
-		Name:     "session",
+		Name:     AuthTypeCookie,
 		Value:    id.String(),
 		Secure:   true, // https
 		HttpOnly: true,
@@ -30,7 +30,7 @@ func (s *Session) createCookie() *http.Cookie {
 func (s *Session) deleteCookie(w http.ResponseWriter) {
 
 	c := &http.Cookie{
-		Name:     "session",
+		Name:     AuthTypeCookie,
 		Value:    "",
 		MaxAge:   -1,
 		Secure:   true,

@@ -28,7 +28,6 @@ func (s *Session) setCookie(next http.HandlerFunc) http.HandlerFunc {
 				http.SetCookie(w, s.createToken())
 			}
 
-			fmt.Println("User page redirect...")
 			// successful redirect to user page
 			http.Redirect(w, req, "/user", http.StatusSeeOther)
 			return
@@ -122,7 +121,6 @@ func (s *Session) setAuthType(next http.HandlerFunc) http.HandlerFunc {
 		if authType == AuthTypeJWTToken {
 			s.AuthType = AuthTypeJWTToken
 		}
-		fmt.Println("Auth Type: ", s.AuthType)
 		next(w, req)
 	}
 }

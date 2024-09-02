@@ -27,7 +27,7 @@ func (s *Session) createToken() *http.Cookie {
 	}
 
 	c := &http.Cookie{
-		Name:     "token",
+		Name:     AuthTypeJWTToken,
 		Value:    tokenString,
 		Secure:   true, // https
 		HttpOnly: true,
@@ -46,7 +46,7 @@ func (s *Session) deleteToken(w http.ResponseWriter) {
 
 	// immediately clear the token cookie
 	c := &http.Cookie{
-		Name:     "token",
+		Name:     AuthTypeJWTToken,
 		Value:    "",
 		MaxAge:   -1,
 		Secure:   true,
