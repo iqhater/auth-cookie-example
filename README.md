@@ -12,7 +12,7 @@
 
 App has a one user. See example.env file, where user credentials is located.
 
-[Live demo](https://cookie.envdev.space)
+[Live demo](https://cookie.devgo.space)
 
 ### Screenshot
 
